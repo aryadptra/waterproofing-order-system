@@ -18,6 +18,14 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('core/assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('core/assets/css/components.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('core/node_modules/summernote/dist/summernote-bs4.css') }}"> --}}
+
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('core/node_modules/summernote/dist/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('core/node_modules/codemirror/lib/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ asset('core/node_modules/codemirror/theme/duotone-dark.css') }}">
+    <link rel="stylesheet" href="{{ asset('core/node_modules/selectric/public/selectric.css') }}">
+    <link rel="stylesheet" href="{{ asset('core/node_modules/select2/dist/css/select2.min.css') }}">
 </head>
 
 <body>
@@ -63,20 +71,31 @@
                                     @method('POST')
                                     <div class="row">
                                         <div class="form-group col-6">
-                                            <label for="first_name">First Name</label>
-                                            <input id="first_name" type="text" class="form-control" name="first_name"
+                                            <label for="name">Nama Lengkap</label>
+                                            <input id="name" name="name" type="text" class="form-control"
                                                 autofocus>
                                         </div>
                                         <div class="form-group col-6">
-                                            <label for="last_name">Last Name</label>
-                                            <input id="last_name" type="text" class="form-control" name="last_name">
+                                            <label for="email">Email</label>
+                                            <input id="email" type="email" class="form-control" name="email">
+                                            <div class="invalid-feedback">
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input id="email" type="email" class="form-control" name="email">
+                                        <label for="phone">No Handphone</label>
+                                        <input id="number" type="number" class="form-control" name="phone">
                                         <div class="invalid-feedback">
+                                        </div>
+                                    </div>
+
+                                    {{-- Text Area --}}
+
+                                    <div class="form-group">
+                                        <label class="">Alamat</label>
+                                        <div class="">
+                                            <textarea name="address" class="form-control" rows="30" cols="20"></textarea>
                                         </div>
                                     </div>
 
@@ -97,14 +116,14 @@
                                                 name="password_confirmation">
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" name="agree" class="custom-control-input"
                                                 id="agree">
                                             <label class="custom-control-label" for="agree">I agree with the terms
                                                 and conditions</label>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-lg btn-block">
                                             Register
@@ -132,7 +151,7 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="../assets/js/stisla.js"></script>
+    <script src="assets/js/stisla.js"></script>
 
     <!-- JS Libraies -->
     <script src="{{ asset('core/node_modules/jquery-pwstrength/jquery.pwstrength.min.js') }}"></script>
@@ -143,7 +162,20 @@
     <script src="{{ asset('core/assets/js/custom.js') }}"></script>
 
     <!-- Page Specific JS File -->
-    <script src="../assets/js/page/auth-register.js"></script>
+    <script src="{{ asset('core/assets/js/page/auth-register.js') }}"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="{{ asset('core/assets/js/stisla.js') }}"></script>
+    <!-- JS Libraies -->
+    <script src="{{ asset('core/node_modules/summernote/dist/summernote-bs4.js') }}"></script>
+    <script src="{{ asset('core/node_modules/codemirror/lib/codemirror.js') }}"></script>
+    <script src="{{ asset('core/node_modules/codemirror/mode/javascript/javascript.js') }}"></script>
+    <script src="{{ asset('core/node_modules/selectric/public/jquery.selectric.min.js') }}"></script>
+    <script src="{{ asset('core/node_modules/select2/dist/js/select2.full.min.js') }}"></script>
+
+    <script src="{{ asset('core/assets/js/page/forms-advanced-forms.js') }}"></script>
 </body>
 
 </html>
