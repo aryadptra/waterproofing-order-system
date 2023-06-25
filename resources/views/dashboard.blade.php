@@ -1,17 +1,68 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                    You're logged in!
+@section('title', 'Dashboard')
+
+@section('content')
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <div class="card-icon bg-primary">
+                    <i class="far fa-user"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Total User</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ count($user) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <div class="card-icon bg-danger">
+                    <i class="far fa-newspaper"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Sparepart</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ $total_sparepart }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <div class="card-icon bg-warning">
+                    <i class="far fa-file"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Booking</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ $total_booking }}
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <div class="card-icon bg-success">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Service</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ count($service) }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

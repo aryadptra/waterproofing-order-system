@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Service;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,4 +23,21 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'namespace' => 'Admin'], function () {
+    Route::name('admin.')->group(function () {
+        Route::get('/dashboard', function () {
+
+            $user = User::all();
+            $service = Service::all();
+
+            return view('dashboard', [
+                'user' => $user,
+                'service' => $service
+            ]);
+        })->name('dashboard');
+
+        Route::get('service', 'ServiceController@index')->name('service.index');
+    });
+});
+
+require __DIR__ . '/auth.php';
