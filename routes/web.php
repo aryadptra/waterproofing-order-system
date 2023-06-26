@@ -37,6 +37,11 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'namespace
         })->name('dashboard');
 
         Route::get('service', 'ServiceController@index')->name('service.index');
+        Route::get('service/create', 'ServiceController@create')->name('service.create');
+        Route::post('service/store', 'ServiceController@store')->name('service.store');
+        Route::get('service/{id}/edit', 'ServiceController@edit')->name('service.edit');
+        Route::put('service/{id}/update', 'ServiceController@update')->name('service.update');
+        Route::delete('service/{id}/delete', 'ServiceController@destroy')->name('service.destroy');
     });
 });
 

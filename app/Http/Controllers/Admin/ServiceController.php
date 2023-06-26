@@ -18,7 +18,7 @@ class ServiceController extends Controller
         $service = Service::all();
 
         return view('admin.service.index', [
-            'service' => $service,
+            'services' => $service,
         ]);
     }
 
@@ -40,7 +40,15 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
+        $service = Service::create($validate);
+
+        return redirect()->route('admin.service.index')->with('success', 'Service ' . $service->name . ' berhasil ditambahkan');
     }
 
     /**
@@ -62,7 +70,15 @@ class ServiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $service = Service::findOrFail($id);
+
+        if (!$service) {
+            return redirect()->route('admin.service.index')->with('error', 'Service tidak ditemukan');
+        }
+
+        return view('admin.service.edit', [
+            'service' => $service,
+        ]);
     }
 
     /**
@@ -74,7 +90,21 @@ class ServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validate = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
+        $service = Service::findOrFail($id);
+
+        if (!$service) {
+            return redirect()->route('admin.service.index')->with('error', 'Service tidak ditemukan');
+        }
+
+        $service->update($validate);
+
+        return redirect()->route('admin.service.index')->with('success', 'Service ' . $service->name . ' berhasil diubah');
     }
 
     /**
