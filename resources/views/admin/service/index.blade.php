@@ -78,13 +78,17 @@
                                                 class="btn btn-primary btn-sm">
                                                 <i class="fas fa-pencil-alt"></i>
                                             </a>
-
-                                            <a class="btn btn-danger btn-sm"
-                                                href="{{ route('admin.service.destroy', ['id' => $item->id]) }}"
-                                                onclick="delete()">
-                                                {{-- <i class="fas fa-trash"></i> --}}
-                                                Delete
-                                            </a>
+                                            {{-- Form --}}
+                                            <form action="{{ route('admin.service.destroy', ['id' => $item->id]) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                {{-- Delete --}}
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -156,7 +160,7 @@
 
     <script>
         function delete() {
-            // O
+            confirm("Apakah anda yakin ingin menghapus data ini?");
         }
     </script>
 @endpush

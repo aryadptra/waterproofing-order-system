@@ -115,6 +115,14 @@ class ServiceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $service = Service::findOrFail($id);
+
+        if (!$service) {
+            return redirect()->route('admin.service.index')->with('error', 'Service tidak ditemukan');
+        }
+
+        $service->delete();
+
+        return redirect()->route('admin.service.index')->with('success', 'Service ' . $service->name . ' berhasil dihapus');
     }
 }
