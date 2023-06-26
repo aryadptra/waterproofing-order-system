@@ -17,6 +17,10 @@
                     href="{{ route('admin.service.index') }}"><i class="fas fa-tools"></i>
                     <span>Layanan</span></a>
             </li>
+            <li class="@if (Request::segment(2) == 'order') active @endif"><a class="nav-link"
+                    href="{{ route('admin.order.index') }}"><i class="fas fa-shopping-cart"></i>
+                    <span>Pesanan</span></a>
+            </li>
         </ul>
     </aside>
 </div>
