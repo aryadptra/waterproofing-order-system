@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="form-group text-right">
-                                <a href="auth-forgot-password.html" class="float-left mt-3">
+                                <a href="" class="float-left mt-3">
                                     Forgot Password?
                                 </a>
                                 <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right"

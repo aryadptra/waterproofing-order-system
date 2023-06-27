@@ -72,7 +72,7 @@
                                         <td>
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->orderDetail->name }}</td>
                                         <td>{{ $item->service->name }}</td>
                                         <td>{{ $item->orderDetail->address }}</td>
                                         <td>{{ $item->orderDetail->area }}</td>
@@ -81,6 +81,8 @@
                                         <td>
                                             @if ($item->status == 'pending')
                                                 <span class="badge badge-warning">Menunggu Konfirmasi</span>
+                                            @elseif($item->status == 'wait_payment')
+                                                <span class="badge badge-secondary">Menunggu Pembayaran</span>
                                             @elseif($item->status == 'confirmed')
                                                 <span class="badge badge-info">Dikonfirmasi</span>
                                             @elseif($item->status == 'on_progress')

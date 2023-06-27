@@ -30,9 +30,13 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'namespace
             $user = User::all();
             $service = Service::all();
 
+            // Count
+            $countUser = $user->count();
+            $countService = $service->count();
+
             return view('dashboard', [
                 'user' => $user,
-                'service' => $service
+                'service' => $service,
             ]);
         })->name('dashboard');
 
@@ -53,6 +57,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'namespace
         Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
         Route::delete('order/{id}/delete', 'OrderController@destroy')->name('order.destroy');
         Route::get('order/getService/{id}', 'OrderController@getService')->name('order.getService');
+        Route::put('order/{id}/updateStatus', 'OrderController@updateStatus')->name('order.updateStatus');
     });
 });
 

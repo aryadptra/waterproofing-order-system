@@ -15,9 +15,10 @@
     <div class="row">
         <div class="col-12 col-md-12 col-lg-12">
             <div class="card">
-                <form method="post" action="{{ route('admin.order.store') }}" class="needs-validation" novalidate="">
+                <form method="post" action="{{ route('admin.order.update', ['id' => $order->id]) }}"
+                    class="needs-validation" novalidate="">
                     @csrf
-                    @method('POST')
+                    @method('PUT')
                     <div class="card-header">
                         <h4>Tambah Pesanan</h4>
                     </div>
@@ -25,28 +26,33 @@
                         <div class="row">
                             <div class="form-group col-md-6 col-12">
                                 <label>Nama</label>
-                                <input type="text" class="form-control" value="{{ old('name') }}" name="name">
+                                <input type="text" class="form-control" value="{{ $order->orderDetail->name }}"
+                                    name="name">
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>No Handphone</label>
-                                <input type="number" class="form-control" value="{{ old('phone') }}" name="phone">
+                                <input type="number" class="form-control" value="{{ $order->orderDetail->phone }}"
+                                    name="phone">
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>Email</label>
-                                <input type="email" class="form-control" value="{{ old('email') }}" name="email">
+                                <input type="email" class="form-control" value="{{ $order->orderDetail->email }}"
+                                    name="email">
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>Alamat</label>
                                 <textarea class="form-control" rows="30" cols="30" id="address" required name="address"
-                                    placeholder="Alamat"></textarea>
+                                    placeholder="Alamat">{{ $order->orderDetail->address }}</textarea>
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>Layanan</label>
-                                {{-- Select Option --}}
                                 <select class="form-control selectric" name="service_id">
                                     <option value="">Pilih Layanan</option>
                                     @foreach ($services as $service)
-                                        <option value="{{ $service->id }}">{{ $service->name }}</option>
+                                        {{-- <option value="{{ $service->id }}">{{ $service->name }}</option> --}}
+                                        {{-- If $order->service_id , selected --}}
+                                        <option value="{{ $service->id }}"
+                                            @if ($order->service_id == $service->id) selected @endif>{{ $service->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -58,8 +64,9 @@
                                             Rp.
                                         </div>
                                     </div>
-                                    <input required type="number" readonly value="" class="form-control"
-                                        id="price" name="price" placeholder="Harga">
+                                    <input required type="number" value="{{ $order->service->price }}" readonly
+                                        value="" class="form-control" id="price" name="price"
+                                        placeholder="Harga">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             / Meter
@@ -70,8 +77,8 @@
                             <div class="form-group col-md-6 col-12">
                                 <label>Luas Area</label>
                                 <div class="input-group">
-                                    <input required type="number" value="{{ old('area') }}" class="form-control"
-                                        id="area" name="area" placeholder="Luas Area">
+                                    <input required type="number" value="{{ $order->orderDetail->area }}"
+                                        class="form-control" id="area" name="area" placeholder="Luas Area">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             Meter
@@ -87,7 +94,7 @@
                                             Rp.
                                         </div>
                                     </div>
-                                    <input required type="number" readonly value="{{ old('total') }}"
+                                    <input required type="number" readonly value="{{ $order->orderDetail->total }}"
                                         class="form-control" id="total" name="total" placeholder="Total Harga">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -98,11 +105,30 @@
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>Date Time Picker</label>
-                                <input type="datetime-local" name="schedule" class="form-control">
+                                <input type="datetime-local" value="{{ $order->orderDetail->schedule }}" name="schedule"
+                                    class="form-control">
                             </div>
                             <div class="form-group col-md-6 col-12">
                                 <label>Catatan</label>
-                                <textarea class="form-control" id="description" required name="message" placeholder="Catatan">{{ old('message') }}</textarea>
+                                <textarea class="form-control" id="description" required name="message" placeholder="Catatan">{{ $order->orderDetail->message }}</textarea>
+                            </div>
+                            {{-- Status --}}
+                            <div class="form-group col-md-12">
+                                <label>Status</label>
+                                <select class="form-control selectric" name="status">
+                                    <option value="">Pilih Status</option>
+                                    <option value="pending" @if ($order->status == 'pending') selected @endif>Pending
+                                    </option>
+                                    <option value="wait_payment" @if ($order->status == 'wait_payment') selected @endif>Menunggu
+                                        Pembayaran</option>
+                                    <option value="confirmed" @if ($order->status == 'confirmed') selected @endif>
+                                        Dikonfirmasi</option>
+                                    <option value="on_progress" @if ($order->status == 'on_progress') selected @endif>Dalam
+                                        Pengerjaan
+                                    <option value="done" @if ($order->status == 'done') selected @endif>Selesai
+                                    </option>
+                                    <option value="canceled" @if ($order->status == 'canceled') selected @endif>Dibatalkan
+                                </select>
                             </div>
                         </div>
                     </div>
