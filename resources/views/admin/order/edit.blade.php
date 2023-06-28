@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Pesanan Baru')
+@section('title', 'Edit Pesanan')
 
 @push('custom-css')
     <link rel="stylesheet" href="{{ asset('core/node_modules/summernote/dist/summernote-bs4.css') }}">
@@ -16,11 +16,42 @@
         <div class="col-12 col-md-12 col-lg-12">
             <div class="card">
                 <form method="post" action="{{ route('admin.order.update', ['id' => $order->id]) }}"
-                    class="needs-validation" novalidate="">
+                    class="needs-validation" enctype="multipart/form-data" novalidate="">
                     @csrf
                     @method('PUT')
                     <div class="card-header">
                         <h4>Tambah Pesanan</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="container">
+                                @if (session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Sukses!</strong> {{ session('success') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                @endif
+                                {{-- Jika any error --}}
+                                @if ($errors->any())
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Whoops!</strong> Terjadi kesalahan saat input data, yaitu:
+                                        <ul class="pl-4 my-2">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+
+                                        Mohon periksa kembali :)
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -112,8 +143,34 @@
                                 <label>Catatan</label>
                                 <textarea class="form-control" id="description" required name="message" placeholder="Catatan">{{ $order->orderDetail->message }}</textarea>
                             </div>
+                            {{-- Proof of Payment --}}
+                            <div class="form-group col-md-6 col-12">
+                                <label>Bukti Pembayaran</label>
+                                <input type="file" class="form-control" name="proof_of_transfer"
+                                    onchange="document.getElementById('image-preview').src = window.URL.createObjectURL(this.files[0])">
+                                {{-- Max 2 MB --}}
+                                <span class="text-muted">Max 2MB</span>
+                                <br>
+                                <br>
+
+                                @if ($order->orderDetail->proof_of_transfer)
+                                    <img src="{{ asset('storage/' . $order->orderDetail->proof_of_transfer) }}"
+                                        alt="Bukti Pembayaran" style="width: 200px; height: 200px; object-fit: cover;">
+
+                                    <br>
+
+                                    {{-- Button Download --}}
+                                    <a href="{{ asset('storage/' . $order->orderDetail->proof_of_transfer) }}"
+                                        class="btn btn-primary btn-sm mt-2" download>Download</a>
+                                @endif
+
+                                {{-- Image Preview --}}
+                                <img src="" alt="Bukti" id="image-preview"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                            </div>
+
                             {{-- Status --}}
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6 col-12">
                                 <label>Status</label>
                                 <select class="form-control selectric" name="status">
                                     <option value="">Pilih Status</option>
@@ -199,5 +256,18 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        // Image Preview
+        function previewImage() {
+            document.getElementById("image-preview").style.display = "block";
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById("image").files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                document.getElementById("image-preview").src = oFREvent.target.result;
+            };
+        };
     </script>
 @endpush

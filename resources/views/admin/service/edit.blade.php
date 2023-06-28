@@ -14,6 +14,37 @@
                     <div class="card-header">
                         <h4>Edit Layanan</h4>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="container">
+                                @if (session('success'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Sukses!</strong> {{ session('success') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                @endif
+                                {{-- Jika any error --}}
+                                @if ($errors->any())
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <strong>Whoops!</strong> Terjadi kesalahan saat input data, yaitu:
+                                        <ul class="pl-4 my-2">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+
+                                        Mohon periksa kembali :)
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-md-6 col-12">

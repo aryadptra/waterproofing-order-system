@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class OrderController extends Controller
 {
@@ -99,12 +100,38 @@ class OrderController extends Controller
             'message' => 'required',
             'total' => 'required',
             'status' => 'required',
+            'proof_of_transfer' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
         ]);
 
         $order->update([
             'service_id' => $request->service_id,
             'status' => $request->status,
         ]);
+
+        // Jika ada gambar yang diupload
+        if ($request->hasFile('proof_of_transfer')) {
+            // Hapus gambar lama
+            if ($order->proof_of_transfer && file_exists(storage_path('app/public/' . $order->proof_of_transfer))) {
+                Storage::delete('public/' . $order->proof_of_transfer);
+            }
+
+            // Upload gambar baru
+            $file = $request->file('proof_of_transfer');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/proof_of_transfer', $filename);
+
+            $order->orderDetail()->update([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'area' => $request->area,
+                'address' => $request->address,
+                'schedule' => $request->schedule,
+                'message' => $request->message,
+                'total' => $request->total,
+                'proof_of_transfer' => 'proof_of_transfer/' . $filename
+            ]);
+        }
 
         $order->orderDetail()->update([
             'name' => $request->name,
@@ -116,6 +143,7 @@ class OrderController extends Controller
             'message' => $request->message,
             'total' => $request->total,
         ]);
+
 
         return redirect()->route('admin.order.index')->with('success', 'Order ' . $order->id . ' berhasil diupdate');
     }
