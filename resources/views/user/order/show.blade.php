@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.user')
 
 @section('title', 'Faktur Pesanan')
 
@@ -13,6 +13,37 @@
 @endpush
 
 @section('content')
+
+    <div class="row">
+        <div class="col-12">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Sukses!</strong> {{ session('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+            @endif
+            {{-- Jika any error --}}
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Whoops!</strong> Terjadi kesalahan saat input data, yaitu:
+                    <ul class="pl-4 my-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+
+                    Mohon periksa kembali :)
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+
+                </div>
+            @endif
+        </div>
+    </div>
+
     <div class="invoice" id="invoice-print">
         <div class="invoice-print">
             <div class="row">
@@ -47,6 +78,10 @@
                                     <div class="badge badge-warning">{{ ucfirst($order->status) }}</div>
                                 @elseif ($order->status == 'wait_payment')
                                     <div class="badge badge-info">Menunggu Pembayaran</div>
+                                @elseif($order->status == 'waiting_confirmation')
+                                    <div class="badge badge-info">Menunggu Konfirmasi</div>
+                                @elseif($order->status == 'confirmed')
+                                    <div class="badge badge-success">Dikonfirmasi</div>
                                 @elseif ($order->status == 'process')
                                     <div class="badge badge-primary">{{ ucfirst($order->status) }}</div>
                                 @elseif ($order->status == 'done')
@@ -106,7 +141,7 @@
             {{-- If Status != 'cancel', show button --}}
             @if ($order->status === 'pending')
                 <div class="float-lg-left mb-lg-0 mb-3">
-                    <form method="POST" action="{{ route('admin.order.updateStatus', ['id' => $order->id]) }}">
+                    <form method="POST" action="{{ route('user.order.updateStatus', ['id' => $order->id]) }}">
                         @csrf
                         @method('PUT')
                         <button type="submit" name="button" value="wait_payment"
@@ -118,11 +153,68 @@
                     </form>
                 </div>
             @endif
+            @if ($order->status === 'wait_payment')
+                {{-- Modal Upload Bukti Pembayaran --}}
+                <div class="float-lg-left mb-lg-0 mb-3">
+                    <button type="button" class="btn btn-primary btn-icon icon-left" data-toggle="modal"
+                        data-target="#uploadPaymentModal"><i class="fas fa-upload"></i> Upload Bukti Pembayaran</button>
+                </div>
+                {{-- Modal Upload Bukti Pembayaran --}}
+            @endif
             <button class="btn btn-warning btn-icon icon-left" onclick="printInvoice()"><i class="fas fa-print"></i>
                 Print</button>
         </div>
     </div>
 @endsection
+
+@push('custom-modal')
+    {{-- Modal Input File  --}}
+    <div class="modal fade"tabindex="-1" role="dialog" id="uploadPaymentModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Data Sparepart</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('user.order.uploadProof', $order->id) }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            {{-- Foto --}}
+                            <label for="foto">Foto</label>
+                            <div class="custom-file">
+                                <input type="file" class="form-control" name="proof_of_transfer"
+                                    onchange="document.getElementById('image-preview').src = window.URL.createObjectURL(this.files[0])">
+                                {{-- Max 2 MB --}}
+                                <span class="text-muted">Max 2MB</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{-- Foto Preview --}}
+                            <label for="foto-preview">Foto Preview</label>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <img src="" alt="Bukti" id="image-preview"
+                                        style="width: 100px; height: 100px; object-fit: cover;">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endpush
 
 @push('custom-js')
     <script>
@@ -133,5 +225,17 @@
             window.print();
             document.body.innerHTML = originalContents;
         }
+    </script>
+    <script>
+        // Image Preview
+        function previewImage() {
+            document.getElementById("image-preview").style.display = "block";
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById("image").files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                document.getElementById("image-preview").src = oFREvent.target.result;
+            };
+        };
     </script>
 @endpush

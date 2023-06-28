@@ -19,9 +19,41 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
+
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::name('user.')->group(function () {
+        Route::get('/dashboard', function () {
+
+            $user = User::all();
+            $service = Service::all();
+
+            // Count
+            $countUser = $user->count();
+            $countService = $service->count();
+
+            return view('user.dashboard', [
+                'user' => $user,
+                'service' => $service,
+            ]);
+        })->name('dashboard');
+
+        // Order
+        Route::get('order', 'OrderController@index')->name('order.index');
+        Route::get('order/create', 'OrderController@create')->name('order.create');
+        Route::post('order/store', 'OrderController@store')->name('order.store');
+        Route::get('order/{id}/edit', 'OrderController@edit')->name('order.edit');
+        Route::put('order/{id}/update', 'OrderController@update')->name('order.update');
+        Route::get('order/{id}/show', 'OrderController@show')->name('order.show');
+        Route::delete('order/{id}/delete', 'OrderController@destroy')->name('order.destroy');
+        Route::get('order/getService/{id}', 'OrderController@getService')->name('order.getService');
+        Route::put('order/{id}/updateStatus', 'OrderController@updateStatus')->name('order.updateStatus');
+        Route::put('order/{id}/uploadProof', 'OrderController@uploadProof')->name('order.uploadProof');
+    });
+});
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::name('admin.')->group(function () {

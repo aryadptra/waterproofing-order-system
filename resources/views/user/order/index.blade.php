@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.user')
 
 @section('title', 'Pesanan')
 
@@ -17,7 +17,7 @@
                     {{-- Right button --}}
                     <div class="ml-auto">
                         {{-- Add Order Button --}}
-                        <a href="{{ route('admin.order.create') }}" class="btn btn-primary">
+                        <a href="{{ route('user.order.create') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Tambah Pesanan
                         </a>
                     </div>
@@ -97,26 +97,25 @@
                                         </td>
                                         <td>
                                             {{-- Show Button --}}
-                                            <a href="{{ route('admin.order.show', ['id' => $item->id]) }}"
+                                            <a href="{{ route('user.order.show', ['id' => $item->id]) }}"
                                                 class="btn btn-success btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             {{-- Edit --}}
-                                            <a href="{{ route('admin.order.edit', ['id' => $item->id]) }}"
+                                            {{-- <a href="{{ route('user.order.edit', ['id' => $item->id]) }}"
                                                 class="btn btn-primary btn-sm">
                                                 <i class="fas fa-pencil-alt"></i>
-                                            </a>
+                                            </a> --}}
                                             {{-- Form --}}
-                                            <form action="{{ route('admin.order.destroy', ['id' => $item->id]) }}"
+                                            {{-- <form action="{{ route('user.order.destroy', ['id' => $item->id]) }}"
                                                 method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                {{-- Delete --}}
                                                 <button type="submit" class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus data ini?')">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
-                                            </form>
+                                            </form> --}}
                                         </td>
                                     </tr>
                                 @endforeach
