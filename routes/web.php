@@ -95,6 +95,14 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'namespace
         Route::delete('order/{id}/delete', 'OrderController@destroy')->name('order.destroy');
         Route::get('order/getService/{id}', 'OrderController@getService')->name('order.getService');
         Route::put('order/{id}/updateStatus', 'OrderController@updateStatus')->name('order.updateStatus');
+
+        // User
+        Route::get('user', 'UserController@index')->name('user.index');
+        Route::get('user/create', 'UserController@create')->name('user.create');
+        Route::post('user/store', 'UserController@store')->name('user.store');
+        Route::get('user/{id}/edit', 'UserController@edit')->name('user.edit');
+        Route::put('user/{id}/update', 'UserController@update')->name('user.update');
+        Route::delete('user/{id}/delete', 'UserController@destroy')->name('user.destroy');
     });
 });
 
