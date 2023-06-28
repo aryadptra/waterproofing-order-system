@@ -52,6 +52,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('order/getService/{id}', 'OrderController@getService')->name('order.getService');
         Route::put('order/{id}/updateStatus', 'OrderController@updateStatus')->name('order.updateStatus');
         Route::put('order/{id}/uploadProof', 'OrderController@uploadProof')->name('order.uploadProof');
+
+
+        // User Profile
+        Route::get('profile', 'UserController@indexProfile')->name('user.profile');
+        Route::put('profile', 'UserController@updateProfile')->name('user.profile.update');
     });
 });
 
